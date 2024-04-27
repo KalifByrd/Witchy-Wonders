@@ -7,11 +7,14 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.toxicteddie.witchywonders.factions.FactionProvider;
 import com.toxicteddie.witchywonders.factions.IFaction;
+import com.toxicteddie.witchywonders.network.FactionUpdatePacket;
+import com.toxicteddie.witchywonders.network.NetworkHandler;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraft.network.chat.Component;
 import java.util.concurrent.CompletableFuture;
 
@@ -51,6 +54,8 @@ public class SetFactionCommand {
             } else {
                 faction.setFaction(newType);
                 context.getSource().sendSuccess(() -> Component.literal("Changed player from " + currentFaction + " to " + newType.name() + "."), false);
+                FactionUpdatePacket packet = new FactionUpdatePacket(newType.name());
+                NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
             }
         });
 
