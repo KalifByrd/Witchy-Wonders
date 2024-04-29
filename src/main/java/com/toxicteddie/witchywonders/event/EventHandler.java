@@ -1,6 +1,8 @@
 package com.toxicteddie.witchywonders.event;
 
 import com.toxicteddie.witchywonders.factions.FactionProvider;
+import com.toxicteddie.witchywonders.factions.IFaction;
+import com.toxicteddie.witchywonders.inventory.WitchInventoryCapabilityProvider;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -21,11 +23,19 @@ public class EventHandler {
      */
     @SubscribeEvent
     public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
+        
         if (event.getObject() instanceof Player) {
+            Player player = (Player) event.getObject();
             // Attaching the faction capability to all player entities
             event.addCapability(new ResourceLocation("witchywonders", "faction"), new FactionProvider());
+            player.getCapability(FactionProvider.FACTION_CAP).ifPresent(faction -> {
+                if (faction.getFaction() == IFaction.FactionType.WITCH) {
+                    // Use WitchInventory for this player
+                    event.addCapability(new ResourceLocation("witchywonders", "extra_hotbar"), new WitchInventoryCapabilityProvider((Player) event.getObject()));
+                }
+            });
         }
+        
     }
-    
-    // Add other event methods as needed for your mod's functionality
 }
+
