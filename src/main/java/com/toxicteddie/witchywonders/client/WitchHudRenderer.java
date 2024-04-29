@@ -1,7 +1,5 @@
 package com.toxicteddie.witchywonders.client;
 
-import java.lang.annotation.ElementType;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
@@ -14,7 +12,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -24,12 +21,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
 import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import com.google.common.collect.Iterables;
-import net.minecraft.client.gui.GuiGraphics;
-
 import com.toxicteddie.witchywonders.GameState;
 import com.toxicteddie.witchywonders.factions.FactionProvider;
 import com.toxicteddie.witchywonders.factions.IFaction;
@@ -40,13 +33,12 @@ public class WitchHudRenderer {
     private static final Logger LOGGER = LogManager.getLogger(WitchHudRenderer.class);
     private static final ResourceLocation ICONS = new ResourceLocation("witchywonders", "textures/gui/icons.png");
     private static final ResourceLocation HOTBAR_SPRITE = new ResourceLocation("witchywonders", "textures/gui/hotbar.png");
-    
-    private static final int HOTBAR_SLOTS = 9;
-    private static final int ICON_SLOTS = 4; // Assuming you have 4 custom icons
+ 
     private static int selectedIconIndex = -1; // -1 means no custom icon is selected, using hotbar
 
     @SubscribeEvent
     public static void onRenderGui(RenderGuiEvent event) {
+        
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
@@ -62,9 +54,11 @@ public class WitchHudRenderer {
             LOGGER.info("the players current faction is: " + currentFaction);
             if (currentFaction == IFaction.FactionType.WITCH) {
                 LOGGER.info("Player is a witch. Rendering icons.");
+                drawPowerHotbarBackground(matrixStack);
                 drawMagicalEnergyBar(matrixStack);
                 drawElementalIcons(matrixStack);
-                drawPowerHotbarBackground(matrixStack);
+                renderHotbarSelector(matrixStack);
+                
         
             } else {
                 LOGGER.info("Player is not a witch.");
@@ -82,41 +76,77 @@ public class WitchHudRenderer {
         drawElementalIcons(matrixStack);
         player.getInventory().setPickedItem(ItemStack.EMPTY);  // Ensure no item is displayed in hand
     }
-
-    
-
-    
-    
-    private static void drawPowerHotbarBackground(PoseStack matrixStack)
-    {
+    private static void renderHotbarSelector(PoseStack matrixStack) {
         Minecraft mc = Minecraft.getInstance();
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();
-        // Icon dimensions
-        final int iconWidth = 18;
-        final int iconHeight = 22;
-         
-        // Assuming each hotbar slot is approximately 20 pixels wide and there are 9 slots
-        int hotbarWidth = 9 * 20; // Total width of the hotbar
-        int startX = (screenWidth + hotbarWidth) / 2 + 10; // Start right after the hotbar, adding a little gap
-        int startY = screenHeight - iconHeight; // Align with the bottom of the screen, like the hotbar
+    
+        // Assuming each hotbar slot is 20 pixels wide
+        final int slotWidth = 20;
+        int hotbarWidth = 9 * slotWidth;
+        int startX = (screenWidth - hotbarWidth) / 2 - 2;
+    
+        // Selector position based on currently selected slot
+        int selectorX = startX + mc.player.getInventory().selected * slotWidth;
+        int selectorY = screenHeight - 23; // Position at the bottom of the screen
+    
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, new ResourceLocation("minecraft", "textures/gui/widgets.png"));
+        
+        // UV coordinates for the selector, adjusted if necessary
+        float uvX1 = 0.0f;
+        float uvY1 = 22.0f / 256.0f;
+        float uvX2 = 24.0f / 256.0f;
+        float uvY2 = (22.0f + 22.0f) / 256.0f;
+        // Drawing the selector
+        matrixStack.pushPose();
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.vertex(matrixStack.last().pose(), selectorX, selectorY + 22, 0.0F).uv(uvX1, uvY2).endVertex();
+        buffer.vertex(matrixStack.last().pose(), selectorX + 24, selectorY + 22, 0.0F).uv(uvX2, uvY2).endVertex();
+        buffer.vertex(matrixStack.last().pose(), selectorX + 24, selectorY, 0.0F).uv(uvX2, uvY1).endVertex();
+        buffer.vertex(matrixStack.last().pose(), selectorX, selectorY, 0.0F).uv(uvX1, uvY1).endVertex();
+        tesselator.end();
+        matrixStack.popPose();
+        RenderSystem.disableBlend();
+    }
+    
+    
+    private static void drawPowerHotbarBackground(PoseStack matrixStack) {
+        Minecraft mc = Minecraft.getInstance();
+        int screenWidth = mc.getWindow().getGuiScaledWidth();
+        int screenHeight = mc.getWindow().getGuiScaledHeight();
+        
+        // Dimensions and position
+        final int iconWidth = 20; // Same width as the hotbar slots
+        final int iconHeight = 22; // Same height for consistency
+        int hotbarWidth = 9 * iconWidth; // Width of the default hotbar
+        int startX = (screenWidth - hotbarWidth) / 2 + hotbarWidth; // Start right after the hotbar, adding a small gap
+        int startY = screenHeight - iconHeight; // Lowering the bar to align just above the default hotbar, reduce further if needed
+    
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, HOTBAR_SPRITE);
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder buffer = tesselator.getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-
+    
+        // Assuming the sprite sheet has individual icons laid out horizontally
+        int textureWidth = 80; // Total width of the texture containing all icons
+        int singleIconTextureWidth = textureWidth / 4; // Width of each icon in the texture
+    
+        // Draw each additional slot without gaps
         for (int i = 0; i < 4; i++) {
-            float u0 = (float) (i * iconWidth) / 72; // textureWidth is the full width of the icon strip
-            float u1 = (float) (i * iconWidth + iconWidth) / 72;
-            float v0 = 0f;
-            float v1 = 1f;
-
-            int x = startX + i * iconWidth; // Position each icon to the right
+            float u0 = (float) (i * singleIconTextureWidth) / textureWidth; // Starting U coordinate
+            float u1 = (float) (i * singleIconTextureWidth + singleIconTextureWidth) / textureWidth; // Ending U coordinate
+            float v0 = 0.0f; // Starting V coordinate (top of the texture)
+            float v1 = 1.0f; // Ending V coordinate (bottom of the texture)
+    
+            int x = startX + i * iconWidth; // Position each slot next to the other without any gap
             int y = startY;
-
+    
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f); // Normal coloring
-
+    
             matrixStack.pushPose();
             buffer.vertex(matrixStack.last().pose(), x, y + iconHeight, 0f).uv(u0, v1).endVertex();
             buffer.vertex(matrixStack.last().pose(), x + iconWidth, y + iconHeight, 0f).uv(u1, v1).endVertex();
@@ -128,6 +158,9 @@ public class WitchHudRenderer {
         tesselator.end();
         RenderSystem.disableBlend();
     }
+    
+    
+    
 
     private static final ResourceLocation ENERGY_BAR_TEXTURE = new ResourceLocation("witchywonders", "textures/gui/energy_bar.png");
     private static final ResourceLocation BEAST_MARK_ICON = new ResourceLocation("witchywonders", "textures/gui/mark_of_the_beast.png");
@@ -238,8 +271,9 @@ public class WitchHudRenderer {
         
         // Assuming each hotbar slot is approximately 20 pixels wide and there are 9 slots
         int hotbarWidth = 9 * 20; // Total width of the hotbar
-        int startX = (screenWidth + hotbarWidth) / 2 + 10; // Start right after the hotbar, adding a little gap
-        int startY = screenHeight - iconHeight; // Align with the bottom of the screen, like the hotbar
+        int startX = (screenWidth + hotbarWidth) / 2 + 1; // Start right after the hotbar, adding a little gap
+        int startY = screenHeight - iconHeight - 2; // Align with the bottom of the screen, like the hotbar
+        int spacing = 2; // Spacing between each icon
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, ICONS);
@@ -248,26 +282,15 @@ public class WitchHudRenderer {
         BufferBuilder buffer = tesselator.getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
-        String[] keys = {"0", "-", "=", "`"}; // Keys corresponding to icons, starting with 0 next to slot 9
-
         for (int i = 0; i < 4; i++) {
             float u0 = (float) (i * iconWidth) / 72; // textureWidth is the full width of the icon strip
             float u1 = (float) (i * iconWidth + iconWidth) / 72;
             float v0 = 0f;
             float v1 = 1f;
 
-            int x = startX + i * iconWidth; // Position each icon to the right
+            int x = startX + i * (iconWidth + spacing); // Position each icon to the right with additional spacing
             int y = startY;
 
-            // Change color if the icon is selected
-            if (i == selectedIconIndex) {
-                RenderSystem.setShaderColor(1f, 1f, 0.5f, 1f); // Highlight selected icon, e.g., a yellow tint
-            } else {
-                RenderSystem.setShaderColor(1f, 1f, 1f, 1f); // Normal coloring
-            }
-
-            // Log the key bound to each icon for debugging
-            LOGGER.info("Binding icon " + (i + 1) + " to key '" + keys[i] + "' at x: " + x + ", y: " + y);
             matrixStack.pushPose();
             buffer.vertex(matrixStack.last().pose(), x, y + iconHeight, 0f).uv(u0, v1).endVertex();
             buffer.vertex(matrixStack.last().pose(), x + iconWidth, y + iconHeight, 0f).uv(u1, v1).endVertex();
