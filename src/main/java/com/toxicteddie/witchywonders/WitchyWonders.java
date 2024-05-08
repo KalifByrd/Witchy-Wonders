@@ -1,8 +1,16 @@
 package com.toxicteddie.witchywonders;
 
 import com.mojang.logging.LogUtils;
+import com.toxicteddie.witchywonders.event.powers.HydrokinesisHandler;
+import com.toxicteddie.witchywonders.event.powers.TelekinesisHandler;
+import com.toxicteddie.witchywonders.network.EntityMovePacket;
+import com.toxicteddie.witchywonders.network.NetworkHandler;
+import com.toxicteddie.witchywonders.particle.ModParticles;
+import com.toxicteddie.witchywonders.sound.ModSounds;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -24,6 +32,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -60,7 +70,14 @@ public class WitchyWonders
             .displayItems((parameters, output) -> {
                 output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
             }).build());
-
+    
+    public static final String PROTOCOL_VERSION = "1";
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+        new ResourceLocation("witchywonders", "main"),
+        () -> PROTOCOL_VERSION,
+        PROTOCOL_VERSION::equals,
+        PROTOCOL_VERSION::equals
+    );
     public WitchyWonders()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -84,6 +101,22 @@ public class WitchyWonders
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
+        CHANNEL.registerMessage(0, EntityMovePacket.class, EntityMovePacket::toBytes, EntityMovePacket::new, EntityMovePacket::handle);
+        MinecraftForge.EVENT_BUS.register(TelekinesisHandler.class);
+        MinecraftForge.EVENT_BUS.register(HydrokinesisHandler.class);
+
+        // Register particles
+        ModParticles.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ModSounds.register(modEventBus);
+
+    }
+    // Subscribe to the FMLCommonSetupEvent to setup your mod when common setup occurs
+    @SubscribeEvent
+    public void setup(FMLCommonSetupEvent event) {
+        // Enqueue the setup to be run in the proper thread
+        event.enqueueWork(() -> {
+            NetworkHandler.register();  // Initialize your networking
+        });
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

@@ -10,6 +10,7 @@ import com.toxicteddie.witchywonders.factions.IFaction;
 import com.toxicteddie.witchywonders.network.FactionUpdatePacket;
 import com.toxicteddie.witchywonders.network.NetworkHandler;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -45,6 +46,7 @@ public class SetFactionCommand {
         return builder.buildFuture();
     }
 
+    @SuppressWarnings("resource")
     private static int setFaction(CommandContext<CommandSourceStack> context, IFaction.FactionType newType) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         player.getCapability(FactionProvider.FACTION_CAP).ifPresent(faction -> {
@@ -56,6 +58,10 @@ public class SetFactionCommand {
                 context.getSource().sendSuccess(() -> Component.literal("Changed player from " + currentFaction + " to " + newType.name() + "."), false);
                 FactionUpdatePacket packet = new FactionUpdatePacket(newType.name());
                 NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
+                if(newType.name() == "HUMAN")
+                {
+                    Minecraft.getInstance().player.getInventory().selected = 0;
+                }
             }
         });
 

@@ -7,7 +7,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-        new ResourceLocation("witchywonders", "network"),
+        new ResourceLocation("witchywonders", "main_channel"),
         () -> PROTOCOL_VERSION,
         PROTOCOL_VERSION::equals,
         PROTOCOL_VERSION::equals
@@ -19,5 +19,14 @@ public class NetworkHandler {
                                  FactionUpdatePacket::encode,
                                  FactionUpdatePacket::decode,
                                  ClientPacketHandler::handle);
+        INSTANCE.registerMessage(id++, FireProjectilePacket.class,
+                                 FireProjectilePacket::encode,
+                                 FireProjectilePacket::decode,
+                                 FireProjectilePacket::handle);
+
+        INSTANCE.registerMessage(id++, SetOnFirePacket.class,
+                                 SetOnFirePacket::encode,
+                                 SetOnFirePacket::decode,
+                                 SetOnFirePacket::handle);
     }
 }

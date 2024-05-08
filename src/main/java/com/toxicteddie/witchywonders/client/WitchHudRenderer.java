@@ -43,17 +43,17 @@ public class WitchHudRenderer {
         Player player = mc.player;
 
         if (player == null) {
-            LOGGER.info("Player instance not found.");
+           // LOGGER.info("Player instance not found.");
             return;
         }
-        LOGGER.info("Rendering HUD for player: " + player.getName().getString());
+        // LOGGER.info("Rendering HUD for player: " + player.getName().getString());
         PoseStack matrixStack = new PoseStack();  // Manually creating a PoseStack
 
         player.getCapability(FactionProvider.FACTION_CAP).ifPresent(faction -> {
             IFaction.FactionType currentFaction = faction.getFaction();
-            LOGGER.info("the players current faction is: " + currentFaction);
+           // LOGGER.info("the players current faction is: " + currentFaction);
             if (currentFaction == IFaction.FactionType.WITCH) {
-                LOGGER.info("Player is a witch. Rendering icons.");
+              //  LOGGER.info("Player is a witch. Rendering icons.");
                 drawPowerHotbarBackground(matrixStack);
                 drawMagicalEnergyBar(matrixStack);
                 drawElementalIcons(matrixStack);
@@ -61,7 +61,7 @@ public class WitchHudRenderer {
                 
         
             } else {
-                LOGGER.info("Player is not a witch.");
+               // LOGGER.info("Player is not a witch.");
             }
         });
         
@@ -308,6 +308,9 @@ public class WitchHudRenderer {
         if (event.getAction() != GLFW.GLFW_PRESS) return;  // Only act on key presses
 
         Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        if (player == null || !isWitch(player)) return; // Check if player is a witch
+
         int key = event.getKey();
         boolean isCustomKey = false;
 
@@ -356,7 +359,7 @@ public class WitchHudRenderer {
     public static void onMouseScroll(MouseScrollingEvent event) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if (mc.screen instanceof InventoryScreen || player == null) return; // Ignore if in inventory screen or player is null
+        if (mc.screen instanceof InventoryScreen || player == null|| !isWitch(player)) return; // Ignore if in inventory screen or player is null
 
         int currentSlot = player.getInventory().selected;
         double scrollDelta = event.getScrollDelta();
@@ -376,7 +379,9 @@ public class WitchHudRenderer {
         player.getInventory().selected = currentSlot; // Set the current slot, this handles all 13 slots now
         event.setCanceled(true); // Prevent default scrolling behavior
     }
-
+    private static boolean isWitch(Player player) {
+        return player.getCapability(FactionProvider.FACTION_CAP).map(faction -> faction.getFaction() == IFaction.FactionType.WITCH).orElse(false);
+    }
 
     
 

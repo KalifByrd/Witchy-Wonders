@@ -31,7 +31,7 @@ public class EventHandler {
             player.getCapability(FactionProvider.FACTION_CAP).ifPresent(faction -> {
                 if (faction.getFaction() == IFaction.FactionType.WITCH) {
                     // Use WitchInventory for this player
-                    event.addCapability(new ResourceLocation("witchywonders", "extra_hotbar"), new WitchInventoryCapabilityProvider((Player) event.getObject()));
+                    //event.addCapability(new ResourceLocation("witchywonders", "extra_hotbar"), new WitchInventoryCapabilityProvider((Player) event.getObject()));
                 }
             });
         }
