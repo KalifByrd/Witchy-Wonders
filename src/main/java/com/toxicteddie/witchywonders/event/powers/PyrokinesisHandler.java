@@ -12,10 +12,12 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -24,13 +26,13 @@ import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
+import com.toxicteddie.witchywonders.event.SoundEventHelper;
 import com.toxicteddie.witchywonders.network.FireProjectilePacket;
 import com.toxicteddie.witchywonders.network.NetworkHandler;
-import com.toxicteddie.witchywonders.network.SetOnFirePacket;
+import com.toxicteddie.witchywonders.network.SetBlockOnFirePacket;
+import com.toxicteddie.witchywonders.network.SetEntityOnFirePacket;
 import com.toxicteddie.witchywonders.sound.ModSounds;
 
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 
 @Mod.EventBusSubscriber
@@ -39,18 +41,36 @@ public class PyrokinesisHandler {
     private static int chargeTime = 0;
     private static final int maxChargeTime = 100;
 
+    private static Boolean showMagicParticles = false;
+    private static Boolean projectFire = false;
+    private static Entity ignitedEntity = null;
+    private static int ticksCount = 0;
+
+
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton event) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
+
         if (player == null || mc.level == null) return;
 
         if (player.getInventory().selected == 11 && event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
             if (event.getAction() == GLFW.GLFW_PRESS) {
                 HitResult hitResult = mc.hitResult;
                 if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
-                    Entity entity = ((EntityHitResult) hitResult).getEntity();
-                    NetworkHandler.INSTANCE.sendToServer(new SetOnFirePacket(entity.getId(), 5));
+                    ignitedEntity = ((EntityHitResult) hitResult).getEntity();
+                    SoundEventHelper.playOneShotSound(mc, ModSounds.MAGIC_SOUND.get());
+                    mc.level.addParticle(ParticleTypes.EXPLOSION, ignitedEntity.getX(), ignitedEntity.getY(), ignitedEntity.getZ(), 1.0, 0.0, 0.0);
+                    NetworkHandler.INSTANCE.sendToServer(new SetEntityOnFirePacket(ignitedEntity.getId(), 5));
+                    showMagicParticles = true;
+                    event.setCanceled(true);
+                }
+                else if (hitResult.getType() == HitResult.Type.BLOCK) {
+                    BlockHitResult blockHitResult = (BlockHitResult) hitResult;
+                    BlockPos blockPos = blockHitResult.getBlockPos();
+                    Direction direction = blockHitResult.getDirection();
+                    NetworkHandler.INSTANCE.sendToServer(new SetBlockOnFirePacket(blockPos, direction));
+                    SoundEventHelper.playOneShotSound(mc, ModSounds.MAGIC_SOUND.get());
                     event.setCanceled(true);
                 }
             }
@@ -62,20 +82,68 @@ public class PyrokinesisHandler {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null || mc.level == null || player.getInventory().selected != 11) return;
-
+        if(projectFire)
+        {
+            fireProjectile(player);
+            NetworkHandler.INSTANCE.sendToServer(new FireProjectilePacket(new BlockPos(player.getBlockX(), player.getBlockY(), player.getBlockZ()), player.getXRot(), player.getYRot()));
+            if (ticksCount < 50) {  // 50 ticks = 2.5 seconds
+                ticksCount++;
+            } else {
+                projectFire = false;
+                ticksCount = 0;  // Reset the counter
+            }
+        }
+        if(showMagicParticles)
+        {
+            addSparkleEffect(null, ignitedEntity, null);
+            if (ticksCount < 100) {  // 50 ticks = 5 seconds
+                ticksCount++;
+            } else {
+                showMagicParticles = false;
+                ticksCount = 0;  // Reset the counter
+            }
+        }
         if (mc.options.keyUse.isDown()) {
             chargeTime++;
             if (chargeTime >= maxChargeTime) {
-                Vec3 startVec = player.getEyePosition(1.0F);
-                Vec3 lookVec = player.getViewVector(1.0F);
-                NetworkHandler.INSTANCE.sendToServer(new FireProjectilePacket(startVec, lookVec));
+                
+                SoundEventHelper.playOneShotSound(mc, ModSounds.MAGIC_SOUND.get());
+                
+                
+                projectFire = true;
+                
                 chargeTime = 0;
             }
         } else if (chargeTime > 0) {
             chargeTime = 0;
         }
     }
+    private static void fireProjectile(LocalPlayer player) {
+        Level world = player.level();  // Access the player's world
+        Vec3 position = player.position().add(0, player.getEyeHeight(), 0);  // Start from player's eye height
+        Vec3 lookVec = player.getLookAngle();  // Get the direction the player is looking
+    
+        int numParticles = 300;  // More particles for a more dramatic effect
+        double velocity = 0.5;  // Speed of the particles
+        double spread = 0.1;  // Narrower spread to simulate a focused flame blast
+    
+        RandomSource random = RandomSource.create();  // Random source for particle spread
+    
+        for (int i = 0; i < numParticles; i++) {
+            double dx = lookVec.x + random.nextGaussian() * spread;
+            double dy = lookVec.y + random.nextGaussian() * spread;
+            double dz = lookVec.z + random.nextGaussian() * spread;
+    
+            // Adjust dx, dy, dz based on the lookVec for direction and add some randomness for spread
+            world.addParticle(ParticleTypes.FLAME,
+                              position.x, position.y, position.z,
+                              dx * velocity, dy * velocity, dz * velocity);
+        }
+    }
+    
+    
 
+    @SuppressWarnings("resource")
     @SubscribeEvent
     public static void onRenderGui(RenderGuiEvent.Post event) {
         PoseStack matrixStack = new PoseStack();  // Manually creating a PoseStack
@@ -114,28 +182,40 @@ public class PyrokinesisHandler {
         RenderSystem.enableDepthTest();
     }
 
-    public static void fireProjectile(FireProjectilePacket packet, ServerPlayer player) {
-        Vec3 startPosition = packet.startingPosition;
-        Vec3 directionVector = packet.directionVector;
+    
 
-        player.level().addParticle(ParticleTypes.FLAME, startPosition.x, startPosition.y, startPosition.z, directionVector.x, directionVector.y, directionVector.z);
-    }
+    private static void addSparkleEffect(Level worldLevel, Entity entity, BlockPos blockPos) {
+        if(blockPos == null){
+            Level level = entity.level();  // Directly use the entity's level which is a ServerLevel if this is server-side
+            RandomSource random = level.random;
+            for (int i = 0; i < 20; i++) {
+                double d0 = random.nextGaussian() * 0.02D;
+                double d1 = random.nextGaussian() * 0.02D;
+                double d2 = random.nextGaussian() * 0.02D;
+                level.addParticle(ParticleTypes.ENCHANT, // Use the level directly to add particles
+                    entity.getX() + random.nextDouble() * entity.getBbWidth() * 2.0D - entity.getBbWidth(),
+                    entity.getY() + 0.5D + random.nextDouble() * entity.getBbHeight(),
+                    entity.getZ() + random.nextDouble() * entity.getBbWidth() * 2.0D - entity.getBbWidth(),
+                    d0, d1, d2);
+            }
+        } else {
+            RandomSource random = worldLevel.random;
+            for (int i = 0; i < 20; i++) {
+                double xOffset = random.nextDouble() - 0.5; // Offset from -0.5 to 0.5
+                double yOffset = random.nextDouble() - 0.5; // Offset from -0.5 to 0.5
+                double zOffset = random.nextDouble() - 0.5; // Offset from -0.5 to 0.5
 
-    private static void spawnEnchantParticles(Entity entity) {
-        RandomSource random = entity.level().random;
-        for (int i = 0; i < 10; i++) {
-            double d0 = random.nextGaussian() * 0.02D;
-            double d1 = random.nextGaussian() * 0.02D;
-            double d2 = random.nextGaussian() * 0.02D;
-            entity.level().addParticle(ParticleTypes.ENCHANT, 
-                entity.getX() + random.nextDouble() * entity.getBbWidth() * 2.0D - entity.getBbWidth(),
-                entity.getY() + 0.5D + random.nextDouble() * entity.getBbHeight(),
-                entity.getZ() + random.nextDouble() * entity.getBbWidth() * 2.0D - entity.getBbWidth(), 
-                d0, d1, d2);
+                double x = blockPos.getX() + 0.5 + xOffset; // Center of the block + offset
+                double y = blockPos.getY() + 0.5 + yOffset; // Center of the block + offset
+                double z = blockPos.getZ() + 0.5 + zOffset; // Center of the block + offset
+
+                double dx = xOffset * 0.02; // Spread particles slowly outward
+                double dy = yOffset * 0.02; // Spread particles slowly outward
+                double dz = zOffset * 0.02; // Spread particles slowly outward
+
+                worldLevel.addParticle(ParticleTypes.ENCHANT, x, y, z, dx, dy, dz);
+            }
         }
     }
 
-    private static void playMagicSound(Player player) {
-        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.MAGIC_SOUND.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-    }
 }

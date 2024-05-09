@@ -7,27 +7,27 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class SetOnFirePacket {
+public class SetEntityOnFirePacket {
     private final int entityId;
     private final int fireDuration;
 
-    public SetOnFirePacket(int entityId, int fireDuration) {
+    public SetEntityOnFirePacket(int entityId, int fireDuration) {
         this.entityId = entityId;
         this.fireDuration = fireDuration;
     }
 
-    public static void encode(SetOnFirePacket packet, FriendlyByteBuf buf) {
+    public static void encode(SetEntityOnFirePacket packet, FriendlyByteBuf buf) {
         buf.writeInt(packet.entityId);
         buf.writeInt(packet.fireDuration);
     }
 
-    public static SetOnFirePacket decode(FriendlyByteBuf buf) {
+    public static SetEntityOnFirePacket decode(FriendlyByteBuf buf) {
         int entityId = buf.readInt();
         int fireDuration = buf.readInt();
-        return new SetOnFirePacket(entityId, fireDuration);
+        return new SetEntityOnFirePacket(entityId, fireDuration);
     }
 
-    public static void handle(SetOnFirePacket packet, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(SetEntityOnFirePacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
             if (player != null) {

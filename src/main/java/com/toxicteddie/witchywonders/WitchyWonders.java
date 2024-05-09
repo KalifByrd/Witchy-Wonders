@@ -1,6 +1,7 @@
 package com.toxicteddie.witchywonders;
 
 import com.mojang.logging.LogUtils;
+import com.toxicteddie.witchywonders.block.custom.HemlockCropBlock;
 import com.toxicteddie.witchywonders.event.powers.HydrokinesisHandler;
 import com.toxicteddie.witchywonders.event.powers.TelekinesisHandler;
 import com.toxicteddie.witchywonders.network.EntityMovePacket;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -59,16 +61,54 @@ public class WitchyWonders
     // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
     public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
 
+    // create crop blocks
+    public static final RegistryObject<Block> HEMLOCK_CROP = BLOCKS.register("hemlock_crop",
+        () -> new HemlockCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
+    
+    // Create seeds
+    public static final RegistryObject<Item> HEMLOCK_SEEDS = ITEMS.register("hemlock_seeds",
+        () -> new ItemNameBlockItem(HEMLOCK_CROP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BELLADONNA_SEEDS = ITEMS.register("belladonna_seeds",
+        () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> WOLFSBANE_SEEDS = ITEMS.register("wolfsbane_seeds",
+        () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> MANDRAKE_SEEDS = ITEMS.register("mandrake_seeds",
+        () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> VERVAIN_SEEDS = ITEMS.register("vervain_seeds",
+        () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SAGE_SEEDS = ITEMS.register("sage_seeds",
+        () -> new Item(new Item.Properties()));
+
+    //create flowers
+    public static final RegistryObject<Item> HEMLOCK_ROOT_ITEM = ITEMS.register("hemlock_root", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> BELLADONNA_FLOWER_ITEM = ITEMS.register("belladonna_flower", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> WOLFSBANE_FLOWER_ITEM = ITEMS.register("wolfsbane_flower", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> MANDRAKE_ROOT_ITEM = ITEMS.register("mandrake_root", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> VERVAIN_FLOWER_ITEM = ITEMS.register("vervain_flower", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SAGE_LEAF_ITEM = ITEMS.register("sage_leaf", () -> new Item(new Item.Properties()));
+
     // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
     public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEat().nutrition(1).saturationMod(2f).build())));
 
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
-    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
+    public static final RegistryObject<CreativeModeTab> WITCH_NATURAL_BLOCKS_TAB = CREATIVE_MODE_TABS.register("witch_natural_blocks_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
+            .icon(() -> BELLADONNA_FLOWER_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(HEMLOCK_SEEDS.get());
+                output.accept(BELLADONNA_SEEDS.get());
+                output.accept(WOLFSBANE_SEEDS.get());
+                output.accept(MANDRAKE_SEEDS.get());
+                output.accept(VERVAIN_SEEDS.get());
+                output.accept(SAGE_SEEDS.get());
+
+                output.accept(HEMLOCK_ROOT_ITEM.get());
+                output.accept(BELLADONNA_FLOWER_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(WOLFSBANE_FLOWER_ITEM.get());
+                output.accept(MANDRAKE_ROOT_ITEM.get());
+                output.accept(VERVAIN_FLOWER_ITEM.get());
+                output.accept(SAGE_LEAF_ITEM.get());
             }).build());
     
     public static final String PROTOCOL_VERSION = "1";
@@ -135,8 +175,31 @@ public class WitchyWonders
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-            event.accept(EXAMPLE_BLOCK_ITEM);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(HEMLOCK_SEEDS);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(BELLADONNA_SEEDS);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(WOLFSBANE_SEEDS);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(MANDRAKE_SEEDS);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(VERVAIN_SEEDS);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(SAGE_SEEDS);
+
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(HEMLOCK_ROOT_ITEM);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(BELLADONNA_FLOWER_ITEM);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(WOLFSBANE_FLOWER_ITEM);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(MANDRAKE_ROOT_ITEM);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(VERVAIN_FLOWER_ITEM);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(SAGE_LEAF_ITEM);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

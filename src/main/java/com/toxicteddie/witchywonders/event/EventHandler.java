@@ -2,8 +2,6 @@ package com.toxicteddie.witchywonders.event;
 
 import com.toxicteddie.witchywonders.factions.FactionProvider;
 import com.toxicteddie.witchywonders.factions.IFaction;
-import com.toxicteddie.witchywonders.inventory.WitchInventoryCapabilityProvider;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

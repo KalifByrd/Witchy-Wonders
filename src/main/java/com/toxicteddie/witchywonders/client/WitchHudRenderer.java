@@ -1,7 +1,7 @@
 package com.toxicteddie.witchywonders.client;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+// import org.apache.logging.log4j.LogManager;
+// import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
@@ -30,7 +30,7 @@ import com.toxicteddie.witchywonders.factions.IFaction;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class WitchHudRenderer {
 
-    private static final Logger LOGGER = LogManager.getLogger(WitchHudRenderer.class);
+    //private static final Logger LOGGER = LogManager.getLogger(WitchHudRenderer.class);
     private static final ResourceLocation ICONS = new ResourceLocation("witchywonders", "textures/gui/icons.png");
     private static final ResourceLocation HOTBAR_SPRITE = new ResourceLocation("witchywonders", "textures/gui/hotbar.png");
  

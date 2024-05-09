@@ -24,9 +24,14 @@ public class NetworkHandler {
                                  FireProjectilePacket::decode,
                                  FireProjectilePacket::handle);
 
-        INSTANCE.registerMessage(id++, SetOnFirePacket.class,
-                                 SetOnFirePacket::encode,
-                                 SetOnFirePacket::decode,
-                                 SetOnFirePacket::handle);
+        INSTANCE.registerMessage(id++, SetEntityOnFirePacket.class,
+                                 SetEntityOnFirePacket::encode,
+                                 SetEntityOnFirePacket::decode,
+                                 SetEntityOnFirePacket::handle);
+
+        INSTANCE.registerMessage(id++, SetBlockOnFirePacket.class,
+                                 SetBlockOnFirePacket::encode,
+                                 SetBlockOnFirePacket::decode,
+                                 SetBlockOnFirePacket::handle);
     }
 }
