@@ -48,7 +48,7 @@ public class WitchyWonders
     // Define mod id in a common place for everything to reference
     public static final String MODID = "witchywonders";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
@@ -81,6 +81,7 @@ public class WitchyWonders
 
     //create flowers
     public static final RegistryObject<Item> HEMLOCK_ROOT_ITEM = ITEMS.register("hemlock_root", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> HEMLOCK_FLOWER_ITEM = ITEMS.register("hemlock_flower", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> BELLADONNA_FLOWER_ITEM = ITEMS.register("belladonna_flower", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> WOLFSBANE_FLOWER_ITEM = ITEMS.register("wolfsbane_flower", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MANDRAKE_ROOT_ITEM = ITEMS.register("mandrake_root", () -> new Item(new Item.Properties()));
@@ -91,6 +92,8 @@ public class WitchyWonders
     public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEat().nutrition(1).saturationMod(2f).build())));
 
+
+    
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
     public static final RegistryObject<CreativeModeTab> WITCH_NATURAL_BLOCKS_TAB = CREATIVE_MODE_TABS.register("witch_natural_blocks_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
@@ -104,6 +107,7 @@ public class WitchyWonders
                 output.accept(SAGE_SEEDS.get());
 
                 output.accept(HEMLOCK_ROOT_ITEM.get());
+                output.accept(HEMLOCK_FLOWER_ITEM.get());
                 output.accept(BELLADONNA_FLOWER_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
                 output.accept(WOLFSBANE_FLOWER_ITEM.get());
                 output.accept(MANDRAKE_ROOT_ITEM.get());
@@ -190,6 +194,8 @@ public class WitchyWonders
 
         if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
             event.accept(HEMLOCK_ROOT_ITEM);
+        if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
+            event.accept(HEMLOCK_FLOWER_ITEM);
         if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
             event.accept(BELLADONNA_FLOWER_ITEM);
         if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
