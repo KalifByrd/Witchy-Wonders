@@ -1,4 +1,4 @@
-package com.toxicteddie.witchywonders.event;
+package com.toxicteddie.witchywonders.events;
 
 import com.toxicteddie.witchywonders.WitchyWonders;
 

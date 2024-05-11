@@ -1,4 +1,4 @@
-package com.toxicteddie.witchywonders.event.powers;
+package com.toxicteddie.witchywonders.events.powers;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -26,7 +26,8 @@ import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import com.toxicteddie.witchywonders.event.SoundEventHelper;
+
+import com.toxicteddie.witchywonders.events.SoundEventHelper;
 import com.toxicteddie.witchywonders.network.FireProjectilePacket;
 import com.toxicteddie.witchywonders.network.NetworkHandler;
 import com.toxicteddie.witchywonders.network.SetBlockOnFirePacket;

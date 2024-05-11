@@ -1,4 +1,4 @@
-package com.toxicteddie.witchywonders.event;
+package com.toxicteddie.witchywonders.events;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;

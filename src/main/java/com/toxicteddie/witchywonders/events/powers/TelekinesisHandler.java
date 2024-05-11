@@ -1,7 +1,7 @@
-package com.toxicteddie.witchywonders.event.powers;
+package com.toxicteddie.witchywonders.events.powers;
 
 import com.toxicteddie.witchywonders.WitchyWonders;
-import com.toxicteddie.witchywonders.event.SoundEventHelper;
+import com.toxicteddie.witchywonders.events.SoundEventHelper;
 import com.toxicteddie.witchywonders.network.EntityMovePacket;
 import com.toxicteddie.witchywonders.sound.ModSounds;
 

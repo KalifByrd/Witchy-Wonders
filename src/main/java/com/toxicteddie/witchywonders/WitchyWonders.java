@@ -2,8 +2,9 @@ package com.toxicteddie.witchywonders;
 
 import com.mojang.logging.LogUtils;
 import com.toxicteddie.witchywonders.block.custom.HemlockCropBlock;
-import com.toxicteddie.witchywonders.event.powers.HydrokinesisHandler;
-import com.toxicteddie.witchywonders.event.powers.TelekinesisHandler;
+import com.toxicteddie.witchywonders.block.custom.MandrakeCropBlock;
+import com.toxicteddie.witchywonders.events.powers.HydrokinesisHandler;
+import com.toxicteddie.witchywonders.events.powers.TelekinesisHandler;
 import com.toxicteddie.witchywonders.network.EntityMovePacket;
 import com.toxicteddie.witchywonders.network.NetworkHandler;
 import com.toxicteddie.witchywonders.particle.ModParticles;
@@ -64,6 +65,8 @@ public class WitchyWonders
     // create crop blocks
     public static final RegistryObject<Block> HEMLOCK_CROP = BLOCKS.register("hemlock_crop",
         () -> new HemlockCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> MANDRAKE_CROP = BLOCKS.register("mandrake_crop",
+        () -> new MandrakeCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
     
     // Create seeds
     public static final RegistryObject<Item> HEMLOCK_SEEDS = ITEMS.register("hemlock_seeds",
@@ -73,7 +76,7 @@ public class WitchyWonders
     public static final RegistryObject<Item> WOLFSBANE_SEEDS = ITEMS.register("wolfsbane_seeds",
         () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MANDRAKE_SEEDS = ITEMS.register("mandrake_seeds",
-        () -> new Item(new Item.Properties()));
+        () -> new ItemNameBlockItem(MANDRAKE_CROP.get(), new Item.Properties()));
     public static final RegistryObject<Item> VERVAIN_SEEDS = ITEMS.register("vervain_seeds",
         () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SAGE_SEEDS = ITEMS.register("sage_seeds",

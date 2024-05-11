@@ -1,4 +1,4 @@
-package com.toxicteddie.witchywonders.event;
+package com.toxicteddie.witchywonders.events;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;

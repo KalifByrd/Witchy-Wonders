@@ -1,5 +1,6 @@
 package com.toxicteddie.witchywonders.block.custom;
 
+
 import com.toxicteddie.witchywonders.WitchyWonders;
 
 import net.minecraft.core.BlockPos;
@@ -90,6 +91,30 @@ public class HemlockCropBlock extends CropBlock {
 
         return false;
     }
+    // @Override
+    // public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+    //     int age = getAge(state);
+
+    //     if (!world.isClientSide) { // Check if not in creative mode
+    //         world.playSound(null, pos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+    //         if (player.isCreative()) return;
+    //         Random rand = new Random();
+            
+
+    //         if (age == 1) {
+    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_ROOT_ITEM.get(), 1));
+    //         } else if (age == 5) {
+    //             if (rand.nextBoolean()) { // 50% chance to drop an extra seed
+    //                 popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_SEEDS.get(), 1));
+    //             }
+    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_FLOWER_ITEM.get(), 1));
+    //         } else if (age == 8) {
+    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_SEEDS.get(), 1 + rand.nextInt(2))); // 1 to 2 seeds
+    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_FLOWER_ITEM.get(), 1));
+    //         }
+    //     }
+    //     world.removeBlock(pos, false);
+    // }
     
     @Override
     public void growCrops(Level pLevel, BlockPos pPos, BlockState pState) {

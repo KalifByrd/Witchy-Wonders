@@ -34,14 +34,15 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
 
         // Create loot conditions for each growth stage
+        WitchyWonders.LOGGER.info("Generating loot tables for Hemlock Crop");
         LootItemCondition.Builder age1Condition = LootItemBlockStatePropertyCondition
             .hasBlockStateProperties(WitchyWonders.HEMLOCK_CROP.get())
             .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(HemlockCropBlock.AGE, 1));
-
+        WitchyWonders.LOGGER.debug("Loot conditions set for age 1");
         LootItemCondition.Builder age5Condition = LootItemBlockStatePropertyCondition
             .hasBlockStateProperties(WitchyWonders.HEMLOCK_CROP.get())
             .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(HemlockCropBlock.AGE, 5));
-
+        WitchyWonders.LOGGER.debug("Loot conditions set for age 5");
         // Define the loot table for Hemlock crop
         this.add(WitchyWonders.HEMLOCK_CROP.get(), LootTable.lootTable()
             .withPool(LootPool.lootPool()
@@ -57,6 +58,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 .add(LootItem.lootTableItem(WitchyWonders.HEMLOCK_FLOWER_ITEM.get())
                     .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))
         ));
+        WitchyWonders.LOGGER.info("Loot tables generated successfully for Hemlock Crop");
     }
 
     @Override
