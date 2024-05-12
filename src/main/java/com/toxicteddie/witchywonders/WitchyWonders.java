@@ -3,6 +3,8 @@ package com.toxicteddie.witchywonders;
 import com.mojang.logging.LogUtils;
 import com.toxicteddie.witchywonders.block.custom.HemlockCropBlock;
 import com.toxicteddie.witchywonders.block.custom.MandrakeCropBlock;
+import com.toxicteddie.witchywonders.entity.ModEntities;
+import com.toxicteddie.witchywonders.entity.client.MandrakeRenderer;
 import com.toxicteddie.witchywonders.events.powers.HydrokinesisHandler;
 import com.toxicteddie.witchywonders.events.powers.TelekinesisHandler;
 import com.toxicteddie.witchywonders.network.EntityMovePacket;
@@ -11,6 +13,7 @@ import com.toxicteddie.witchywonders.particle.ModParticles;
 import com.toxicteddie.witchywonders.sound.ModSounds;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
@@ -24,6 +27,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -82,6 +86,11 @@ public class WitchyWonders
     public static final RegistryObject<Item> SAGE_SEEDS = ITEMS.register("sage_seeds",
         () -> new Item(new Item.Properties()));
 
+    // Create spawn eggs
+    public static final RegistryObject<Item> MANDRAKE_SPAWN_EGG = ITEMS.register("mandrake_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntities.MANDRAKE, 0x40312E, 0x312127,
+            new Item.Properties()));
+
     //create flowers
     public static final RegistryObject<Item> HEMLOCK_ROOT_ITEM = ITEMS.register("hemlock_root", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> HEMLOCK_FLOWER_ITEM = ITEMS.register("hemlock_flower", () -> new Item(new Item.Properties()));
@@ -116,6 +125,8 @@ public class WitchyWonders
                 output.accept(MANDRAKE_ROOT_ITEM.get());
                 output.accept(VERVAIN_FLOWER_ITEM.get());
                 output.accept(SAGE_LEAF_ITEM.get());
+
+                output.accept(MANDRAKE_SPAWN_EGG.get());
             }).build());
     
     public static final String PROTOCOL_VERSION = "1";
@@ -155,6 +166,9 @@ public class WitchyWonders
         // Register particles
         ModParticles.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModSounds.register(modEventBus);
+
+        // Register Mod Entities
+        ModEntities.register(modEventBus);
 
     }
     // Subscribe to the FMLCommonSetupEvent to setup your mod when common setup occurs
@@ -209,6 +223,9 @@ public class WitchyWonders
             event.accept(VERVAIN_FLOWER_ITEM);
         if (event.getTabKey()== CreativeModeTabs.NATURAL_BLOCKS)
             event.accept(SAGE_LEAF_ITEM);
+
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS)
+            event.accept(MANDRAKE_SPAWN_EGG);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -229,6 +246,7 @@ public class WitchyWonders
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            EntityRenderers.register(ModEntities.MANDRAKE.get(), MandrakeRenderer::new);
         }
     }
 

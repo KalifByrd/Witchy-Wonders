@@ -23,6 +23,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(WitchyWonders.HEMLOCK_SEEDS);
         simpleItem(WitchyWonders.HEMLOCK_FLOWER_ITEM);
         simpleItem(WitchyWonders.HEMLOCK_ROOT_ITEM);
+
+        simpleItem(WitchyWonders.MANDRAKE_SEEDS);
+        simpleItem(WitchyWonders.MANDRAKE_ROOT_ITEM);
+
+        withExistingParent(WitchyWonders.MANDRAKE_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        
     }
 
     
