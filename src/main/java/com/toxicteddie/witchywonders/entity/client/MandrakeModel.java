@@ -22,12 +22,19 @@ import com.toxicteddie.witchywonders.entity.custom.MandrakeEntity;
 public class MandrakeModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart mandrake;
 	private final ModelPart head;
+	@SuppressWarnings("unused")
 	private final ModelPart right_branch;
+	@SuppressWarnings("unused")
 	private final ModelPart left_branch;
+	@SuppressWarnings("unused")
 	private final ModelPart body;
+	@SuppressWarnings("unused")
 	private final ModelPart right_leg;
+	@SuppressWarnings("unused")
 	private final ModelPart left_leg;
+	@SuppressWarnings("unused")
 	private final ModelPart right_arm;
+	@SuppressWarnings("unused")
 	private final ModelPart left_arm;
 
 	public MandrakeModel(ModelPart root) {
@@ -42,6 +49,7 @@ public class MandrakeModel<T extends Entity> extends HierarchicalModel<T> {
 		this.left_arm = root.getChild("mandrake").getChild("left_arm");
 	}
 
+	@SuppressWarnings("unused")
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();

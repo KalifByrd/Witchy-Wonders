@@ -71,7 +71,7 @@ public class PyrokinesisHandler {
                     BlockPos blockPos = blockHitResult.getBlockPos();
                     Direction direction = blockHitResult.getDirection();
                     NetworkHandler.INSTANCE.sendToServer(new SetBlockOnFirePacket(blockPos, direction));
-                    SoundEventHelper.playOneShotSound(mc, ModSounds.MAGIC_SOUND.get());
+                    
                     event.setCanceled(true);
                 }
             }

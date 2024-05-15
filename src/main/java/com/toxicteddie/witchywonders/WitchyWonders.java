@@ -1,6 +1,7 @@
 package com.toxicteddie.witchywonders;
 
 import com.mojang.logging.LogUtils;
+import com.toxicteddie.witchywonders.block.custom.BelladonnaCropBlock;
 import com.toxicteddie.witchywonders.block.custom.HemlockCropBlock;
 import com.toxicteddie.witchywonders.block.custom.MandrakeCropBlock;
 import com.toxicteddie.witchywonders.entity.ModEntities;
@@ -71,20 +72,28 @@ public class WitchyWonders
         () -> new HemlockCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
     public static final RegistryObject<Block> MANDRAKE_CROP = BLOCKS.register("mandrake_crop",
         () -> new MandrakeCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> BELLADONNA_CROP = BLOCKS.register("belladonna_crop",
+        () -> new BelladonnaCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> WOLFSBANE_CROP = BLOCKS.register("wolfsbane_crop",
+        () -> new BelladonnaCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> VERVAIN_CROP = BLOCKS.register("vervain_crop",
+        () -> new BelladonnaCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> SAGE_CROP = BLOCKS.register("sage_crop",
+        () -> new BelladonnaCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
     
     // Create seeds
     public static final RegistryObject<Item> HEMLOCK_SEEDS = ITEMS.register("hemlock_seeds",
         () -> new ItemNameBlockItem(HEMLOCK_CROP.get(), new Item.Properties()));
     public static final RegistryObject<Item> BELLADONNA_SEEDS = ITEMS.register("belladonna_seeds",
-        () -> new Item(new Item.Properties()));
+        () -> new ItemNameBlockItem(BELLADONNA_CROP.get(), new Item.Properties()));
     public static final RegistryObject<Item> WOLFSBANE_SEEDS = ITEMS.register("wolfsbane_seeds",
-        () -> new Item(new Item.Properties()));
+        () -> new ItemNameBlockItem(WOLFSBANE_CROP.get(), new Item.Properties()));
     public static final RegistryObject<Item> MANDRAKE_SEEDS = ITEMS.register("mandrake_seeds",
         () -> new ItemNameBlockItem(MANDRAKE_CROP.get(), new Item.Properties()));
     public static final RegistryObject<Item> VERVAIN_SEEDS = ITEMS.register("vervain_seeds",
-        () -> new Item(new Item.Properties()));
+        () -> new ItemNameBlockItem(VERVAIN_CROP.get(), new Item.Properties()));
     public static final RegistryObject<Item> SAGE_SEEDS = ITEMS.register("sage_seeds",
-        () -> new Item(new Item.Properties()));
+        () -> new ItemNameBlockItem(SAGE_CROP.get(), new Item.Properties()));
 
     // Create spawn eggs
     public static final RegistryObject<Item> MANDRAKE_SPAWN_EGG = ITEMS.register("mandrake_spawn_egg",
@@ -100,6 +109,9 @@ public class WitchyWonders
     public static final RegistryObject<Item> VERVAIN_FLOWER_ITEM = ITEMS.register("vervain_flower", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SAGE_LEAF_ITEM = ITEMS.register("sage_leaf", () -> new Item(new Item.Properties()));
 
+    // create witchy items
+    public static final RegistryObject<Item> PENTACLE_ITEM = ITEMS.register("pentacle", () -> new Item(new Item.Properties()));
+
     // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
     public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEat().nutrition(1).saturationMod(2f).build())));
@@ -109,7 +121,7 @@ public class WitchyWonders
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
     public static final RegistryObject<CreativeModeTab> WITCH_NATURAL_BLOCKS_TAB = CREATIVE_MODE_TABS.register("witch_natural_blocks_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> BELLADONNA_FLOWER_ITEM.get().getDefaultInstance())
+            .icon(() -> PENTACLE_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(HEMLOCK_SEEDS.get());
                 output.accept(BELLADONNA_SEEDS.get());
@@ -127,6 +139,8 @@ public class WitchyWonders
                 output.accept(SAGE_LEAF_ITEM.get());
 
                 output.accept(MANDRAKE_SPAWN_EGG.get());
+
+                output.accept(PENTACLE_ITEM.get());
             }).build());
     
     public static final String PROTOCOL_VERSION = "1";

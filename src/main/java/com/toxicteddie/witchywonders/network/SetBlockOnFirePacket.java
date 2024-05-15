@@ -1,5 +1,6 @@
 package com.toxicteddie.witchywonders.network;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,6 +15,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
+
+import com.toxicteddie.witchywonders.events.SoundEventHelper;
+import com.toxicteddie.witchywonders.sound.ModSounds;
 
 public class SetBlockOnFirePacket {
     private final BlockPos blockPos;
@@ -47,15 +51,20 @@ public class SetBlockOnFirePacket {
                 if (state.is(BlockTags.CAMPFIRES) && !state.getValue(BlockStateProperties.LIT)) {
                     // Set the campfire to lit
                     level.setBlock(pos, state.setValue(BlockStateProperties.LIT, Boolean.TRUE), 11);
+                    SoundEventHelper.playOneShotSound(Minecraft.getInstance(), ModSounds.MAGIC_SOUND.get());
                     level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
                 }
                 else {
                     BlockPos targetPos = pos.relative(packet.direction); // Only use relative for non-campfire blocks
                     BlockState targetState = level.getBlockState(targetPos);
-                    level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
+                    
                     // Check if the target position is air and if the base block is flammable
                     if (targetState.isAir() && (state.isFlammable(level, pos, packet.direction) || canForceFireOnBlock(state))) {
+                        SoundEventHelper.playOneShotSound(Minecraft.getInstance(), ModSounds.MAGIC_SOUND.get());
+                        level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
+                        
                         level.setBlock(targetPos, Blocks.FIRE.defaultBlockState(), 11);
+                        
                     }
                 }
             }

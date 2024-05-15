@@ -1,7 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-      "layer0": "witchywonders:item/belladonna_flower"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "witchywonders:item/belladonna_flower"
   }
-  
+}

@@ -1,12 +1,18 @@
 package com.toxicteddie.witchywonders.block.custom;
 
 
+import java.util.Random;
+
 import com.toxicteddie.witchywonders.WitchyWonders;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -91,30 +97,46 @@ public class HemlockCropBlock extends CropBlock {
 
         return false;
     }
-    // @Override
-    // public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
-    //     int age = getAge(state);
+    @Override
+    public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+        int age = getAge(state);
 
-    //     if (!world.isClientSide) { // Check if not in creative mode
-    //         world.playSound(null, pos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
-    //         if (player.isCreative()) return;
-    //         Random rand = new Random();
-            
+        if (!world.isClientSide) { // Check if not in creative mode
+            world.playSound(null, pos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (player.isCreative()) return;
+            Random rand = new Random();
 
-    //         if (age == 1) {
-    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_ROOT_ITEM.get(), 1));
-    //         } else if (age == 5) {
-    //             if (rand.nextBoolean()) { // 50% chance to drop an extra seed
-    //                 popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_SEEDS.get(), 1));
-    //             }
-    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_FLOWER_ITEM.get(), 1));
-    //         } else if (age == 8) {
-    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_SEEDS.get(), 1 + rand.nextInt(2))); // 1 to 2 seeds
-    //             popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_FLOWER_ITEM.get(), 1));
-    //         }
-    //     }
-    //     world.removeBlock(pos, false);
-    // }
+            // Determine the loot for the current block
+            dropLootForAge(world, pos, age, rand);
+
+            // If there is a top block, ensure it also drops its loot
+            if (age >= TRANSITION_START_AGE && age <= MAX_AGE) {
+                BlockPos topPos = pos.above();
+                BlockState topState = world.getBlockState(topPos);
+                if (topState.getBlock() == this) { // Check if the top block is the same crop type
+                    int topBlockAge = getAge(topState);
+                    dropLootForAge(world, topPos, topBlockAge, rand);
+                    world.removeBlock(topPos, false); // Remove the top block
+                }
+            }
+
+            world.removeBlock(pos, false); // Remove the current block
+        }
+    }
+
+    private void dropLootForAge(Level world, BlockPos pos, int age, Random rand) {
+        if (age == 1) {
+            popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_ROOT_ITEM.get(), 1));
+        } else if (age == 5) {
+            if (rand.nextBoolean()) { // 50% chance to drop an extra seed
+                popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_SEEDS.get(), 1));
+            }
+            popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_FLOWER_ITEM.get(), 1));
+        } else if (age == 8) {
+            popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_SEEDS.get(), 1 + rand.nextInt(2))); // 1 to 2 seeds
+            popResource(world, pos, new ItemStack(WitchyWonders.HEMLOCK_FLOWER_ITEM.get(), 1));
+        }
+    }
     
     @Override
     public void growCrops(Level pLevel, BlockPos pPos, BlockState pState) {
