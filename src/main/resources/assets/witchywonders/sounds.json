@@ -1,0 +1,15 @@
+{
+    "magic_sound": {
+      "subtitle": "sounds.toxicteddie.magic_sound",
+      "sounds": [
+          "witchywonders:magic_sound"
+      ]
+    },
+    "magic_sound_end": {
+      "subtitle": "sounds.toxicteddie.magic_sound_end",
+      "sounds": [
+          "witchywonders:magic_sound_end"
+      ]
+    }
+  }
+  
