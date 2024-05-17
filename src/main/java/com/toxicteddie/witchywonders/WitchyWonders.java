@@ -4,6 +4,8 @@ import com.mojang.logging.LogUtils;
 import com.toxicteddie.witchywonders.block.custom.BelladonnaCropBlock;
 import com.toxicteddie.witchywonders.block.custom.HemlockCropBlock;
 import com.toxicteddie.witchywonders.block.custom.MandrakeCropBlock;
+import com.toxicteddie.witchywonders.block.custom.MortarAndPestleBlock;
+import com.toxicteddie.witchywonders.block.entity.MortarAndPestleBlockEntity;
 import com.toxicteddie.witchywonders.entity.ModEntities;
 import com.toxicteddie.witchywonders.entity.client.MandrakeRenderer;
 import com.toxicteddie.witchywonders.events.powers.HydrokinesisHandler;
@@ -11,13 +13,19 @@ import com.toxicteddie.witchywonders.events.powers.TelekinesisHandler;
 import com.toxicteddie.witchywonders.network.EntityMovePacket;
 import com.toxicteddie.witchywonders.network.NetworkHandler;
 import com.toxicteddie.witchywonders.particle.ModParticles;
+import com.toxicteddie.witchywonders.recipe.ModRecipes;
+import com.toxicteddie.witchywonders.screen.MortarAndPestleMenu;
+import com.toxicteddie.witchywonders.screen.MortarAndPestleScreen;
 import com.toxicteddie.witchywonders.sound.ModSounds;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -25,11 +33,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -40,6 +50,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
@@ -57,13 +68,25 @@ public class WitchyWonders
     public static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+    // Create a Deferred Register to handle Block Entities which will be registered under the "wichywonders" namespace
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
     // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    // Create a Deferred Register to handle Menus wich will be registered under the "witchywonders" namespace
+    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
 
     // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
     public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
+
+    // Create functional blocks
+    public static final RegistryObject<Block> MORTAR_AND_PESTLE = BLOCKS.register("mortar_and_pestle",
+        () -> new MortarAndPestleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).dynamicShape().noOcclusion()));
+    public static final RegistryObject<BlockEntityType<MortarAndPestleBlockEntity>> MORTAR_AND_PESTLE_BLOCK_ENTITY =
+        BLOCK_ENTITIES.register("mortar_and_pestle_block_entity", () -> BlockEntityType.Builder.of(MortarAndPestleBlockEntity::new,
+            MORTAR_AND_PESTLE.get()).build(null));
+
     // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
     public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
 
@@ -112,6 +135,20 @@ public class WitchyWonders
     // create witchy items
     public static final RegistryObject<Item> PENTACLE_ITEM = ITEMS.register("pentacle", () -> new Item(new Item.Properties()));
 
+    // create powder items
+    public static final RegistryObject<Item> MANDRAKE_POWDER_ITEM = ITEMS.register("mandrake_powder", () -> new Item(new Item.Properties()));
+
+    // create functional block items
+    public static final RegistryObject<Item> MORTAR_AND_PESTLE_ITEM = ITEMS.register("mortar_and_pestle",
+        () -> new BlockItem(MORTAR_AND_PESTLE.get(), new Item.Properties()));
+
+    // create menus
+    private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
+        return MENUS.register(name, () -> IForgeMenuType.create(factory));
+    }
+    public static final RegistryObject<MenuType<MortarAndPestleMenu>> MORTAR_AND_PESTLE_MENU = registerMenuType("mortar_and_pestle_menu", MortarAndPestleMenu::new);
+    
+
     // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
     public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEat().nutrition(1).saturationMod(2f).build())));
@@ -141,7 +178,13 @@ public class WitchyWonders
                 output.accept(MANDRAKE_SPAWN_EGG.get());
 
                 output.accept(PENTACLE_ITEM.get());
+
+                output.accept(MANDRAKE_POWDER_ITEM.get());
+
+                output.accept(MORTAR_AND_PESTLE_ITEM.get());
             }).build());
+
+    
     
     public static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
@@ -159,10 +202,22 @@ public class WitchyWonders
 
         // Register the Deferred Register to the mod event bus so blocks get registered
         BLOCKS.register(modEventBus);
+
+        // Register the Deferred Register to the mod event bus so block entities get registered
+        BLOCK_ENTITIES.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
+
+        // Register the Deferred Register to the mod event bus so menus get registered
+        MENUS.register(modEventBus);
+
+        // Register the Deferred Register to the mod event bus so serializers get registered
+        ModRecipes.SERIALIZERS.register(modEventBus);
+
+        // Register the Deferred Register to the mod event bus so types get registered
+        ModRecipes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -183,6 +238,11 @@ public class WitchyWonders
 
         // Register Mod Entities
         ModEntities.register(modEventBus);
+
+        //MenuScreens.register(MORTAR_AND_PESTLE_MENU.get(), MortarAndPestleScreen::new);
+
+        
+
 
     }
     // Subscribe to the FMLCommonSetupEvent to setup your mod when common setup occurs
@@ -240,6 +300,12 @@ public class WitchyWonders
 
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS)
             event.accept(MANDRAKE_SPAWN_EGG);
+        
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS)
+            event.accept(MANDRAKE_POWDER_ITEM);
+
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS)
+            event.accept(MORTAR_AND_PESTLE_ITEM);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -260,7 +326,9 @@ public class WitchyWonders
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            MenuScreens.register(MORTAR_AND_PESTLE_MENU.get(), MortarAndPestleScreen::new);
             EntityRenderers.register(ModEntities.MANDRAKE.get(), MandrakeRenderer::new);
+
         }
     }
 

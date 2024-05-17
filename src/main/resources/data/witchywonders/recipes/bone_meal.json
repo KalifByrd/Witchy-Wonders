@@ -1,0 +1,14 @@
+{
+    "type": "witchywonders:item_grounding",
+    "ingredients": [
+      {
+        "item": "minecraft:bone"
+      }
+    ],
+    "result": {
+      "count": 1,
+      "item": "minecraft:bone_meal"
+      
+    }
+}
+  
