@@ -1,0 +1,36 @@
+{
+    "variants": {
+        "facing=north,lit=false": {
+            "model": "witchywonders:block/witchs_oven_state0",
+            "y": 0
+        },
+        "facing=south,lit=false": {
+            "model": "witchywonders:block/witchs_oven_state0",
+            "y": 180
+        },
+        "facing=west,lit=false": {
+            "model": "witchywonders:block/witchs_oven_state0",
+            "y": 270
+        },
+        "facing=east,lit=false": {
+            "model": "witchywonders:block/witchs_oven_state0",
+            "y": 90
+        },
+        "facing=north,lit=true": {
+            "model": "witchywonders:block/witchs_oven_state1",
+            "y": 0
+        },
+        "facing=south,lit=true": {
+            "model": "witchywonders:block/witchs_oven_state1",
+            "y": 180
+        },
+        "facing=west,lit=true": {
+            "model": "witchywonders:block/witchs_oven_state1",
+            "y": 270
+        },
+        "facing=east,lit=true": {
+            "model": "witchywonders:block/witchs_oven_state1",
+            "y": 90
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "SSS",
+      "T T",
+      "T T"
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:bamboo_slab"
+      },
+      "T": {
+        "item": "minecraft:stick"
+      }
+    },
+    "result": {
+      "item": "witchywonders:bamboo_altar_item"
+    }
+  }
+  

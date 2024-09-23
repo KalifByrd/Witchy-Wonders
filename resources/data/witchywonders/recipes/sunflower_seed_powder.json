@@ -1,0 +1,14 @@
+{
+    "type": "witchywonders:item_grounding",
+    "ingredients": [
+      {
+        "item": "witchywonders:sunflower_seeds"
+      }
+    ],
+    "result": {
+      "count": 1,
+      "item": "witchywonders:sunflower_seed_powder"
+      
+    }
+}
+  

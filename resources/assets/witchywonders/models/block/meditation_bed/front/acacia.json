@@ -1,0 +1,95 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "minecraft:block/acacia_planks",
+		"particle": "minecraft:block/acacia_planks"
+	},
+	"elements": [
+		{
+			"from": [1, 1, 1],
+			"to": [15, 2, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 8.25]},
+			"faces": {
+				"north": {"uv": [3, 8, 7, 8.5], "texture": "#1"},
+				"east": {"uv": [8, 3, 12, 3.5], "texture": "#1"},
+				"south": {"uv": [8, 3.5, 12, 4], "texture": "#1"},
+				"west": {"uv": [8, 4, 12, 4.5], "texture": "#1"},
+				"up": {"uv": [16, 16, 0, 0], "texture": "#1"},
+				"down": {"uv": [16, 0, 0, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 1, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 8.25]},
+			"faces": {
+				"north": {"uv": [3, 8, 7, 8.5], "texture": "#1"},
+				"east": {"uv": [8, 3, 12, 3.5], "texture": "#1"},
+				"south": {"uv": [8, 3.5, 12, 4], "texture": "#1"},
+				"west": {"uv": [8, 4, 12, 4.5], "texture": "#1"},
+				"up": {"uv": [16, 16, 0, 0], "texture": "#1"},
+				"down": {"uv": [16, 0, 0, 16], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [26, 16, 0],
+			"translation": [0, 3.5, 0],
+			"scale": [0.24, 0.23, 0.23]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [26, 16, 0],
+			"translation": [0, 3.5, 0],
+			"scale": [0.24, 0.23, 0.23]
+		},
+		"firstperson_righthand": {
+			"rotation": [-15, 5, 0],
+			"translation": [0, 6.25, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-15, 5, 0],
+			"translation": [0, 6.25, 0]
+		},
+		"ground": {
+			"translation": [4, -0.75, 1.25],
+			"scale": [0.23, 0.23, 0.23]
+		},
+		"gui": {
+			"rotation": [26, 147, 0],
+			"translation": [0, 2.75, 0],
+			"scale": [0.45, 0.45, 0.45]
+		},
+		"head": {
+			"translation": [0, 14.5, 0.75]
+		},
+		"fixed": {
+			"rotation": [-90, 0, 0],
+			"translation": [0, 0, -3.25],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "bed",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "front",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "base",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [0, 1]
+						}
+					]
+				}
+			]
+		}
+	]
+}

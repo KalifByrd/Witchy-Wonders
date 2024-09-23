@@ -1,0 +1,16 @@
+{
+  "type": "witchywonders:oil_infusing",
+  "ingredients": [
+    {
+      "item": "witchywonders:mandrake_powder"
+    },
+    {
+      "item": "witchywonders:belladonna_flower"
+    }
+  ],
+  "result": {
+    "item": "minecraft:potion",
+    "count": 1,
+    "nbt": "{\"Potion\":\"witchywonders:oil_of_anointing\"}"
+  }
+}

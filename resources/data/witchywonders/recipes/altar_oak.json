@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "SSS",
+      "T T",
+      "T T"
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:oak_slab"
+      },
+      "T": {
+        "item": "minecraft:stick"
+      }
+    },
+    "result": {
+      "item": "witchywonders:oak_altar_item"
+    }
+  }
+  

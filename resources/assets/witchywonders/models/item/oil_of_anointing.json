@@ -1,0 +1,8 @@
+{
+    "parent": "item/generated",
+    "textures": {
+      "layer0": "witchywonders:item/potion_overlay_blank",
+      "layer1": "witchywonders:item/oil_of_anointing"
+    }
+  }
+  

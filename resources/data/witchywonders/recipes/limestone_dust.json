@@ -1,0 +1,14 @@
+{
+    "type": "witchywonders:item_grounding",
+    "ingredients": [
+      {
+        "item": "witchywonders:limestone_chunk"
+      }
+    ],
+    "result": {
+      "count": 1,
+      "item": "witchywonders:limestone_dust"
+      
+    }
+}
+  

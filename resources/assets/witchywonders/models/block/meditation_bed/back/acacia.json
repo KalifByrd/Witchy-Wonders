@@ -1,0 +1,115 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "minecraft:block/acacia_planks",
+		"2": "witchywonders:block/bed/blue",
+		"particle": "minecraft:block/acacia_planks"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 1, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1.25, 8.75]},
+			"faces": {
+				"north": {"uv": [4, 7.5, 8, 7.75], "texture": "#1"},
+				"east": {"uv": [0, 7.5, 4, 7.75], "texture": "#1"},
+				"south": {"uv": [12, 7.5, 16, 7.75], "texture": "#1"},
+				"west": {"uv": [8, 7.5, 12, 7.75], "texture": "#1"},
+				"up": {"uv": [16, 16, 0, 0], "texture": "#1"},
+				"down": {"uv": [16, 0, 0, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [1, 1, 0],
+			"to": [15, 2, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1.25, 8.75]},
+			"faces": {
+				"north": {"uv": [8, 4.5, 12, 5], "texture": "#1"},
+				"east": {"uv": [8, 5, 12, 5.5], "texture": "#1"},
+				"south": {"uv": [8, 5.5, 12, 6], "texture": "#1"},
+				"west": {"uv": [8, 6, 12, 6.5], "texture": "#1"},
+				"up": {"uv": [16, 16, 0, 0], "texture": "#1"},
+				"down": {"uv": [16, 0, 0, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [2.5, 1, 7],
+			"to": [13.5, 3, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1.25, 8.75]},
+			"faces": {
+				"north": {"uv": [2, 1.75, 5, 2.25], "texture": "#2"},
+				"east": {"uv": [1.75, 0.75, 3.25, 1.25], "texture": "#2"},
+				"south": {"uv": [2, 1.75, 5, 2.25], "texture": "#2"},
+				"west": {"uv": [1.75, 0.75, 3.25, 1.25], "texture": "#2"},
+				"up": {"uv": [2, 1.75, 5, 3.25], "texture": "#2"},
+				"down": {"uv": [2, 1.75, 5, 3.25], "texture": "#2"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [26, 16, 0],
+			"translation": [0, 3.5, 0],
+			"scale": [0.24, 0.23, 0.23]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [26, 16, 0],
+			"translation": [0, 3.5, 0],
+			"scale": [0.24, 0.23, 0.23]
+		},
+		"firstperson_righthand": {
+			"rotation": [-15, 5, 0],
+			"translation": [0, 6.25, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-15, 5, 0],
+			"translation": [0, 6.25, 0]
+		},
+		"ground": {
+			"translation": [4, -0.75, 1.25],
+			"scale": [0.23, 0.23, 0.23]
+		},
+		"gui": {
+			"rotation": [26, 147, 0],
+			"translation": [0, 2.75, 0],
+			"scale": [0.45, 0.45, 0.45]
+		},
+		"head": {
+			"translation": [0, 14.5, 0.75]
+		},
+		"fixed": {
+			"rotation": [-90, 0, 0],
+			"translation": [0, 0, -3.25],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "bed",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "back",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "base",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [0, 1]
+						},
+						{
+							"name": "pillow",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [2]
+						}
+					]
+				}
+			]
+		}
+	]
+}

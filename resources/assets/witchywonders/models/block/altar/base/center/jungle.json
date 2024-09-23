@@ -1,0 +1,67 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"render_type": "minecraft:cutout",
+	"textures": {
+		"table_cloth": "witchywonders:block/altar_cloth_blank",
+		"wood_base": "minecraft:block/jungle_planks",
+		"particle": "minecraft:block/jungle_planks"
+	},
+	"elements": [
+		{
+			"from": [0, 15, 2],
+			"to": [16, 16, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 15, 10]},
+			"faces": {
+				"north": {"uv": [3.5, 14, 7.5, 14.25], "texture": "#wood_base"},
+				"east": {"uv": [0.5, 14, 3.5, 14.25], "texture": "#wood_base"},
+				"south": {"uv": [10.5, 14, 14.5, 14.25], "texture": "#wood_base"},
+				"west": {"uv": [7.5, 14, 10.5, 14.25], "texture": "#wood_base"},
+				"up": {"uv": [16, 16, 0, 0], "texture": "#wood_base"},
+				"down": {"uv": [16, 0, 0, 16], "texture": "#wood_base"}
+			}
+		},
+		{
+			"from": [8, 16.001, 4],
+			"to": [16, 16.001, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-16, 16, 10]},
+			"faces": {
+				"north": {"texture": "#table_cloth"},
+				"east": {"texture": "#table_cloth"},
+				"south": {"texture": "#table_cloth"},
+				"west": {"texture": "#table_cloth"},
+				"up": {"texture": "#table_cloth"},
+				"down": {"texture": "#table_cloth"}
+			}
+		},
+		{
+			"from": [0, 16.001, 4],
+			"to": [8, 16.001, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-16, 16, 10]},
+			"faces": {
+				"north": {"texture": "#table_cloth"},
+				"east": {"texture": "#table_cloth"},
+				"south": {"texture": "#table_cloth"},
+				"west": {"texture": "#table_cloth"},
+				"up": {"texture": "#table_cloth"},
+				"down": {"texture": "#table_cloth"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "center",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				0,
+				{
+					"name": "cloth",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [1, 2]
+				}
+			]
+		}
+	]
+}

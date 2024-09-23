@@ -1,0 +1,22 @@
+{
+    "parent": "item/generated",
+    "textures": {
+      "layer0": "item/potion_overlay",
+      "layer1": "item/potion"
+    },
+    "overrides": [
+      {
+        "predicate": {
+          "witchywonders:custom_potion0": 1
+        },
+        "model": "witchywonders:item/bottle_of_oil"
+      },
+      {
+        "predicate": {
+          "witchywonders:custom_potion1": 1
+        },
+        "model": "witchywonders:item/oil_of_anointing"
+      }
+    ]
+  }
+  

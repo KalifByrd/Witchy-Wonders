@@ -1,0 +1,14 @@
+{
+    "type": "witchywonders:item_grounding",
+    "ingredients": [
+      {
+        "item": "minecraft:poppy"
+      }
+    ],
+    "result": {
+      "count": 1,
+      "item": "minecraft:red_dye"
+      
+    }
+}
+  
