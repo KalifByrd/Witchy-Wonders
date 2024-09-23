@@ -1,0 +1,21 @@
+{
+    "magic_sound": {
+      "subtitle": "sounds.toxicteddie.magic_sound",
+      "sounds": [
+          "witchywonders:magic_sound"
+      ]
+    },
+    "magic_sound_end": {
+      "subtitle": "sounds.toxicteddie.magic_sound_end",
+      "sounds": [
+          "witchywonders:magic_sound_end"
+      ]
+    },
+    "mortar_and_pestle_sound": {
+      "subtitle": "sounds.toxicteddie.mortar_and_pestle_sound",
+      "sounds": [
+          "witchywonders:mortar_and_pestle_sound"
+      ]
+    }
+  }
+  

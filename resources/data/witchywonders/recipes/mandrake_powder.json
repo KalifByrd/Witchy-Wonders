@@ -1,0 +1,14 @@
+{
+    "type": "witchywonders:item_grounding",
+    "ingredients": [
+      {
+        "item": "witchywonders:mandrake_root"
+      }
+    ],
+    "result": {
+      "count": 1,
+      "item": "witchywonders:mandrake_powder"
+      
+    }
+}
+  

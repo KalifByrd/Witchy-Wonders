@@ -1,0 +1,58 @@
+{
+    "variants": {
+        "facing=north,wood_type=acacia": { "model": "witchywonders:block/meditation_stool/acacia" },
+        "facing=south,wood_type=acacia": { "model": "witchywonders:block/meditation_stool/acacia", "y": 180 },
+        "facing=west,wood_type=acacia": { "model": "witchywonders:block/meditation_stool/acacia", "y": 270 },
+        "facing=east,wood_type=acacia": { "model": "witchywonders:block/meditation_stool/acacia", "y": 90 },
+        
+        "facing=north,wood_type=bamboo": { "model": "witchywonders:block/meditation_stool/bamboo" },
+        "facing=south,wood_type=bamboo": { "model": "witchywonders:block/meditation_stool/bamboo", "y": 180 },
+        "facing=west,wood_type=bamboo": { "model": "witchywonders:block/meditation_stool/bamboo", "y": 270 },
+        "facing=east,wood_type=bamboo": { "model": "witchywonders:block/meditation_stool/bamboo", "y": 90 },
+
+        "facing=north,wood_type=birch": { "model": "witchywonders:block/meditation_stool/birch" },
+        "facing=south,wood_type=birch": { "model": "witchywonders:block/meditation_stool/birch", "y": 180 },
+        "facing=west,wood_type=birch": { "model": "witchywonders:block/meditation_stool/birch", "y": 270 },
+        "facing=east,wood_type=birch": { "model": "witchywonders:block/meditation_stool/birch", "y": 90 },
+
+        "facing=north,wood_type=cherry": { "model": "witchywonders:block/meditation_stool/cherry" },
+        "facing=south,wood_type=cherry": { "model": "witchywonders:block/meditation_stool/cherry", "y": 180 },
+        "facing=west,wood_type=cherry": { "model": "witchywonders:block/meditation_stool/cherry", "y": 270 },
+        "facing=east,wood_type=cherry": { "model": "witchywonders:block/meditation_stool/cherry", "y": 90 },
+
+        "facing=north,wood_type=crimson": { "model": "witchywonders:block/meditation_stool/crimson" },
+        "facing=south,wood_type=crimson": { "model": "witchywonders:block/meditation_stool/crimson", "y": 180 },
+        "facing=west,wood_type=crimson": { "model": "witchywonders:block/meditation_stool/crimson", "y": 270 },
+        "facing=east,wood_type=crimson": { "model": "witchywonders:block/meditation_stool/crimson", "y": 90 },
+
+        "facing=north,wood_type=dark_oak": { "model": "witchywonders:block/meditation_stool/dark_oak" },
+        "facing=south,wood_type=dark_oak": { "model": "witchywonders:block/meditation_stool/dark_oak", "y": 180 },
+        "facing=west,wood_type=dark_oak": { "model": "witchywonders:block/meditation_stool/dark_oak", "y": 270 },
+        "facing=east,wood_type=dark_oak": { "model": "witchywonders:block/meditation_stool/dark_oak", "y": 90 },
+
+        "facing=north,wood_type=jungle": { "model": "witchywonders:block/meditation_stool/jungle" },
+        "facing=south,wood_type=jungle": { "model": "witchywonders:block/meditation_stool/jungle", "y": 180 },
+        "facing=west,wood_type=jungle": { "model": "witchywonders:block/meditation_stool/jungle", "y": 270 },
+        "facing=east,wood_type=jungle": { "model": "witchywonders:block/meditation_stool/jungle", "y": 90 },
+
+        "facing=north,wood_type=mangrove": { "model": "witchywonders:block/meditation_stool/mangrove" },
+        "facing=south,wood_type=mangrove": { "model": "witchywonders:block/meditation_stool/mangrove", "y": 180 },
+        "facing=west,wood_type=mangrove": { "model": "witchywonders:block/meditation_stool/mangrove", "y": 270 },
+        "facing=east,wood_type=mangrove": { "model": "witchywonders:block/meditation_stool/mangrove", "y": 90 },
+
+        "facing=north,wood_type=oak": { "model": "witchywonders:block/meditation_stool/oak" },
+        "facing=south,wood_type=oak": { "model": "witchywonders:block/meditation_stool/oak", "y": 180 },
+        "facing=west,wood_type=oak": { "model": "witchywonders:block/meditation_stool/oak", "y": 270 },
+        "facing=east,wood_type=oak": { "model": "witchywonders:block/meditation_stool/oak", "y": 90 },
+
+        "facing=north,wood_type=spruce": { "model": "witchywonders:block/meditation_stool/spruce" },
+        "facing=south,wood_type=spruce": { "model": "witchywonders:block/meditation_stool/spruce", "y": 180 },
+        "facing=west,wood_type=spruce": { "model": "witchywonders:block/meditation_stool/spruce", "y": 270 },
+        "facing=east,wood_type=spruce": { "model": "witchywonders:block/meditation_stool/spruce", "y": 90 },
+
+        "facing=north,wood_type=warped": { "model": "witchywonders:block/meditation_stool/warped" },
+        "facing=south,wood_type=warped": { "model": "witchywonders:block/meditation_stool/warped", "y": 180 },
+        "facing=west,wood_type=warped": { "model": "witchywonders:block/meditation_stool/warped", "y": 270 },
+        "facing=east,wood_type=warped": { "model": "witchywonders:block/meditation_stool/warped", "y": 90 }
+    }
+}
